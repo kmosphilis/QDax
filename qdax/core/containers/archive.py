@@ -161,9 +161,7 @@ class Archive(PyTreeNode):
         values, _indices = knn(self.data, state_descriptors, 1)
 
         # get indices where distance bigger than threshold
-        relevant_indices = jnp.where(
-            values.squeeze() > self.acceptance_threshold, x=0, y=1
-        )
+        relevant_indices = jnp.where(values.squeeze() > self.acceptance_threshold, 0, 1)
 
         def iterate_fn(
             carry: Tuple[Archive, jnp.ndarray, int], condition_data: Dict
@@ -192,7 +190,7 @@ class Archive(PyTreeNode):
 
             # get indices where distance bigger than threshold
             not_too_close = jnp.where(
-                values.squeeze() > self.acceptance_threshold, x=0, y=1
+                values.squeeze() > self.acceptance_threshold, 0, 1
             )
             second_condition = not_too_close.sum()
             condition = (first_condition + second_condition) == 0

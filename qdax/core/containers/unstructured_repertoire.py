@@ -333,7 +333,7 @@ class UnstructuredRepertoire(flax.struct.PyTreeNode):
 
         # put dominated fitness to -jnp.inf
         batch_of_fitnesses = jnp.where(
-            batch_of_fitnesses == cond_values, x=batch_of_fitnesses, y=-jnp.inf
+            batch_of_fitnesses == cond_values, batch_of_fitnesses, -jnp.inf
         )
 
         # get addition condition
@@ -347,8 +347,8 @@ class UnstructuredRepertoire(flax.struct.PyTreeNode):
         # assign fake position when relevant : num_centroids is out of bounds
         batch_of_indices = jnp.where(
             addition_condition,
-            x=batch_of_indices,
-            y=self.max_size,
+            batch_of_indices,
+            self.max_size,
         )
 
         # create new grid
